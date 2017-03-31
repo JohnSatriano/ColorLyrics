@@ -23,10 +23,14 @@ def pc(out,s,color):
     #sys.stdout.write(colored(s,color))
 
 
-filename = sys.argv[1];
-f= open(filename);
+if (len(sys.argv) == 2):
+  filename = sys.argv[1];
+  inputText= open(filename).read();
+else:
+  inputText = sys.stdin.read();
+  
 
-pronunciation = os.popen("cat "+re.escape(filename)+" | espeak --ipa -q").read()
+pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
 #os.popen("./pronounce " + re.escape(s)).read()
 #accentMode = True
 accentMode = False
@@ -93,7 +97,7 @@ for i,letter in enumerate(pronunciation):
 
 #print(out)
 outLines = out.split("\n")
-originalLines = re.split("[\n,]",f.read())
+originalLines = re.split("[\n,]",inputText)
 j = 0
 for i,normalLine in enumerate(originalLines):
   k = j
