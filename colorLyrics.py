@@ -7,35 +7,6 @@ import string
 import operator
 import collections
 
-#Centers the text to line up better, utter gibberish
-def doublecenter(a,b,aP,bP) :
-  if (aP < 0):
-    return a,b
-  aPNext = a.find(" ",aP)
-
-  bPNext = b.find(" ",bP)
-  print (bPNext)
-  print((a,b))
-  if (aPNext < 0 and bPNext < 0):
-    return (a,b)
-  if (aPNext < 0 ):
-    aPNext = len(a.encode("utf-8"))
-  if (bPNext < 0 ):
-    bPNext = len(b.encode("utf-8"))-21
-
-  distance = abs(aP-bP)
-  move = distance / 2
-
-  space = " " * int(move)
-
-  print(a,b,aP,aPNext,bP,bPNext)
-  if aPNext < bPNext :
-    a = a[aP:aPNext] + space + a[aPNext:]
-    doublecenter(a,b,aPNext+move,bPNext)
-  else :
-    b = b[bP:bPNext] + space + b[bPNext:]
-    doublecenter(a,b,aPNext,bPNext+move)
-
 
 #Prints something
 def p(out,s):
@@ -64,7 +35,8 @@ count = dict()
 #pronunciation = pronunciation.replace("iː","ɪ")
 for i,letter in enumerate(pronunciation):
   try:
-    if re.match("[ɹː ʃŋɡˈˌ\nð]",letter) or (re.match("[a-z]",letter,re.IGNORECASE) and re.match("[^aeiou]",letter, re.IGNORECASE)):
+    if (re.match("[^iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒ]",letter, re.IGNORECASE)):
+    #if re.match("[ː ʃŋɡˈˌ\nð]",letter) or (re.match("[a-z]",letter,re.IGNORECASE) and re.match("[^aeiou]",letter, re.IGNORECASE)):
       continue
     #elif re.match("[ˈː]",pronunciation[i+1]):
     elif re.match("[ː]",pronunciation[i+1]) :
