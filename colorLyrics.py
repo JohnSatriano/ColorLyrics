@@ -30,7 +30,10 @@ else:
   inputText = sys.stdin.read();
   
 
-pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
+#pronunciation = os.popen("echo \""+inputText+"\" | ./espeak64/espeak --ipa -q").read()
+#pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/linux_32bit/speak --ipa -q").read()
+pronunciation = os.popen("echo \""+inputText+"\" | ./pronounce").read()
+#pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
 #os.popen("./pronounce " + re.escape(s)).read()
 #accentMode = True
 accentMode = False
@@ -97,16 +100,19 @@ for i,letter in enumerate(pronunciation):
 
 #print(out)
 outLines = out.split("\n")
-originalLines = re.split("[\n,]",inputText)
+#print (len(outLines))
+originalLines = re.split("[\n]",inputText)
+#originalLines = re.split("[\n,]",inputText)
 j = 0
 for i,normalLine in enumerate(originalLines):
   k = j
-  colorLine = outLines[j].strip()
-  while (abs(len(normalLine.split(" ")) - len(colorLine.split(" ")))>2):
+  colorLine = outLines[i].strip().replace("ˈ","")
+  #print(abs(len(normalLine.split(" "))))
+  #while (abs(len(normalLine.split(" ")) - len(colorLine.split(" ")))>2):
     #print(len(line.split(" ")) )
     #print(len(colorLine.split(" ")))
-    j += 1
-    colorLine += " " + outLines[j]
+    #j += 1
+    #colorLine += " " + outLines[j]
 
   normalLine=normalLine.strip()
   colorLine=colorLine.strip()
