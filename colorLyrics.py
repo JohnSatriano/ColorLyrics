@@ -32,7 +32,8 @@ else:
 
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak64/espeak --ipa -q").read()
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/linux_32bit/speak --ipa -q").read()
-pronunciation = os.popen("echo \""+inputText+"\" | ./pronounce").read()
+pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/speak --ipa -q").read()
+#pronunciation = os.popen("echo \""+inputText+"\" | ./pronounce").read()
 #pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
 #os.popen("./pronounce " + re.escape(s)).read()
 #accentMode = True
@@ -80,6 +81,8 @@ colors = [
 specialchars = dict()
 #print(pronunciation)
 for i,color  in enumerate(colors):
+  if (i >= len(count)):
+    continue
   specialchars[count[i][0]] = color
 #print (specialchars)
 out = ""
@@ -101,21 +104,23 @@ for i,letter in enumerate(pronunciation):
 #print(out)
 outLines = out.split("\n")
 #print (len(outLines))
-originalLines = re.split("[\n]",inputText)
-#originalLines = re.split("[\n,]",inputText)
+#originalLines = re.split("[\n]",inputText)
+originalLines = re.split("[\n,]",inputText.replace('\n\n','\n'))
+#print (len(originalLines ))
 j = 0
 for i,normalLine in enumerate(originalLines):
   k = j
-  colorLine = outLines[i].strip().replace("ˈ","")
+  colorLine = outLines[j].strip()
+  #colorLine = outLines[i].strip().replace("ˈ","")
   #print(abs(len(normalLine.split(" "))))
-  #while (abs(len(normalLine.split(" ")) - len(colorLine.split(" ")))>2):
+  while (abs(len(normalLine.split(" ")) - len(colorLine.split(" ")))>2):
     #print(len(line.split(" ")) )
     #print(len(colorLine.split(" ")))
-    #j += 1
-    #colorLine += " " + outLines[j]
+    j += 1
+    colorLine += " " + outLines[j]
 
   normalLine=normalLine.strip()
-  colorLine=colorLine.strip()
+  colorLine=colorLine.strip().replace("ˈ","")
   #for i
   print("%s\n%s"% (normalLine, colorLine))
   #print("%-80s %s"% (normalLine, colorLine))
