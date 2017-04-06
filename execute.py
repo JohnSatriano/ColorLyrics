@@ -9,7 +9,7 @@ def lambda_handler(event,context):
         #print(p.stdout.read())
         p1 = subprocess.Popen(["python3", "./colorLyrics.py", ],stdin=p.stdout,stdout=subprocess.PIPE)
         #print(p1.stdout.read())
-        stdout,stderr = subprocess.Popen(["./ansi2html.sh","--palette=tango","--bg=dark"],stdin=p1.stdout,stdout=subprocess.PIPE).communicate()
+        stdout,stderr = subprocess.Popen(["./ansi2html.sh","--palette=xterm"],stdin=p1.stdout,stdout=subprocess.PIPE).communicate()
         #return "{\"statusCode\": 200,\"headers\": {}, \"body\": \""+stdout.replace('"','\\"')+"\" }"
         #stdout,stderr = subprocess.call("echo" + event["body-json"] + " | python3 ./colorLyrics.py | ./ansi2html.sh --bg=dark",shell=True).communicate()
         return stdout

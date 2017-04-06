@@ -25,11 +25,13 @@ def pc(out,s,color):
 
 if (len(sys.argv) == 2):
   filename = sys.argv[1];
-  inputText= open(filename).read();
+  inputText= open(filename).read()
 else:
   inputText = sys.stdin.read();
   
 
+
+inputText= re.sub('(^\s+)|([ ]+$)|[,.!?]|(\[.*\])','',inputText,flags=re.MULTILINE)
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak64/espeak --ipa -q").read()
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/linux_32bit/speak --ipa -q").read()
 pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/speak --ipa -q").read()
@@ -38,6 +40,7 @@ pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/s
 #os.popen("./pronounce " + re.escape(s)).read()
 #accentMode = True
 accentMode = False
+pronunciation= re.sub('(^\s+)|(\s+$)','',pronunciation,flags=re.MULTILINE)
 
 count = dict()
 #pronunciation = pronunciation.replace("iː","ɪ")
