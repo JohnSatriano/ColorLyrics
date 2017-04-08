@@ -8,7 +8,7 @@ import operator
 import collections
 
 
-#Prints something
+#Prints something, uncomment sysout for debugging
 def p(out,s):
   return s
   #sys.stdout.write(s)
@@ -35,29 +35,23 @@ inputText= re.sub('[,.!"?]|(\[.*\])','',inputText,flags=re.MULTILINE)
 inputText= re.sub(' +',' ',inputText,flags=re.MULTILINE)
 inputText= re.sub('^\s+','',inputText)
 inputText= re.sub('\n\n','\n\n\n',inputText)
-#pronunciation = os.popen("echo \""+inputText+"\" | ./espeak64/espeak --ipa -q").read()
-#pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/linux_32bit/speak --ipa -q").read()
-pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/speak --ipa -q").read()
-#pronunciation = os.popen("echo \""+inputText+"\" | ./pronounce").read()
-#pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
-#os.popen("./pronounce " + re.escape(s)).read()
-#accentMode = True
-accentMode = False
-#pronunciation= re.sub('(^[\t ]+)|([ ]+$)','',pronunciation,flags=re.MULTILINE)
+#pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/speak --ipa -q").read() #local portable option
+pronunciation = os.popen("echo \""+inputText+"\" | espeak --ipa -q").read()
+
+#Clean up multiple spaces that confuse parser
 inputText= re.sub('\n{3,}','\n\n',inputText,flags=re.MULTILINE)
 pronunciation= re.sub('\n{3,}','\n\n',pronunciation,flags=re.MULTILINE)
 
 count = dict()
-#pronunciation = pronunciation.replace("iː","ɪ")
+#Get the frequency of vowel symbols
 for i,letter in enumerate(pronunciation):
   try:
+    # Skip non-vowels. This regex is inverted.
     if (re.match("[^iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒ]",letter, re.IGNORECASE)):
-    #if re.match("[ː ʃŋɡˈˌ\nð]",letter) or (re.match("[a-z]",letter,re.IGNORECASE) and re.match("[^aeiou]",letter, re.IGNORECASE)):
       continue
-    #elif re.match("[ˈː]",pronunciation[i+1]):
+    # This symbol indicates a long vowel. It changes the way it sounds
     elif re.match("[ː]",pronunciation[i+1]) :
       letter = letter + pronunciation[i+1] 
-    #elif letter == "ˈ" or letter == " " or letter == "\n" or lek
   except Exception:
     pass
 
@@ -67,9 +61,9 @@ for i,letter in enumerate(pronunciation):
     count[letter] += 1
 
 
+#Sort the count dictionary
 count = sorted(count.items(), key=operator.itemgetter(1))
 count.reverse()
-#print (count)
 
 colors = [
 'on_red',
@@ -87,15 +81,17 @@ colors = [
 ]
 
 specialchars = dict()
-#print(pronunciation)
+#Assign colors to the most common symbols
 for i,color  in enumerate(colors):
   if (i >= len(count)):
     continue
   specialchars[count[i][0]] = color
-#print (specialchars)
+
 out = ""
 
+#Create the output string
 for i,letter in enumerate(pronunciation):
+  #Check long vowel edge case
   try:
     if re.match("[ː]",pronunciation[i+1]) :
       letter = letter + pronunciation[i+1] 
@@ -109,30 +105,25 @@ for i,letter in enumerate(pronunciation):
   except:
     out += p(out,letter)
 
-#print(out)
+#Splitting output to output them together after all this processing
 outLines = out.split("\n")
-#print (len(outLines))
 originalLines = re.split("[\n]",inputText)
-#originalLines = re.split("[\n,]",inputText.replace('\n\n','\n'))
-#print (len(originalLines ))
+
 j = 0
 for i,normalLine in enumerate(originalLines):
   k = j
   colorLine = outLines[j].strip()
-  #colorLine = outLines[i].strip().replace("ˈ","")
-  #print(abs(len(normalLine.split(" "))))
+  #While the difference in number of words is greater than 2, continue to add words. 
+  #The goal is to align all of the words together. This works, miraculously.
   while (abs(len(normalLine.split(" ")) - len(colorLine.split(" ")))>2):
-    #print(len(line.split(" ")) )
-    #print(len(colorLine.split(" ")))
     j += 1
     colorLine += " " + outLines[j]
 
   normalLine=normalLine.strip()
+  #Strip out this character, it doesn't really help the presentation
   colorLine=colorLine.strip().replace("ˈ","")
-  #for i
+  #Print it!
   print("%s\n%s"% (normalLine, colorLine))
-  #print("%-80s %s"% (normalLine, colorLine))
   j += 1
-#sys.stdout.write(out)
 
-
+#DONE!
