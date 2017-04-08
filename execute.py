@@ -2,8 +2,10 @@
 from subprocess import check_output
 import subprocess
 import json
+
 def lambda_handler(event,context):
     try:
+        #Effectively "echo body | python3 ./colorLyrics.py | ./ansi2html.sh"
         p = subprocess.Popen(["echo", event["body-json"] ],stdout=subprocess.PIPE)
         p1 = subprocess.Popen(["python3", "./colorLyrics.py", ],stdin=p.stdout,stdout=subprocess.PIPE)
         stdout,stderr = subprocess.Popen(["./ansi2html.sh","--palette=xterm"],stdin=p1.stdout,stdout=subprocess.PIPE).communicate()
