@@ -31,7 +31,10 @@ else:
   
 
 
-inputText= re.sub('(^\s+)|([ ]+$)|[,.!?]|(\[.*\])','',inputText,flags=re.MULTILINE)
+inputText= re.sub('[,.!"?]|(\[.*\])','',inputText,flags=re.MULTILINE)
+inputText= re.sub(' +',' ',inputText,flags=re.MULTILINE)
+inputText= re.sub('^\s+','',inputText)
+inputText= re.sub('\n\n','\n\n\n',inputText)
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak64/espeak --ipa -q").read()
 #pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/linux_32bit/speak --ipa -q").read()
 pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/speak --ipa -q").read()
@@ -40,7 +43,9 @@ pronunciation = os.popen("echo \""+inputText+"\" | ./espeak-1.48.04-source/src/s
 #os.popen("./pronounce " + re.escape(s)).read()
 #accentMode = True
 accentMode = False
-pronunciation= re.sub('(^\s+)|(\s+$)','',pronunciation,flags=re.MULTILINE)
+#pronunciation= re.sub('(^[\t ]+)|([ ]+$)','',pronunciation,flags=re.MULTILINE)
+inputText= re.sub('\n{3,}','\n\n',inputText,flags=re.MULTILINE)
+pronunciation= re.sub('\n{3,}','\n\n',pronunciation,flags=re.MULTILINE)
 
 count = dict()
 #pronunciation = pronunciation.replace("iː","ɪ")
@@ -107,8 +112,8 @@ for i,letter in enumerate(pronunciation):
 #print(out)
 outLines = out.split("\n")
 #print (len(outLines))
-#originalLines = re.split("[\n]",inputText)
-originalLines = re.split("[\n,]",inputText.replace('\n\n','\n'))
+originalLines = re.split("[\n]",inputText)
+#originalLines = re.split("[\n,]",inputText.replace('\n\n','\n'))
 #print (len(originalLines ))
 j = 0
 for i,normalLine in enumerate(originalLines):
