@@ -3,6 +3,7 @@ This program converts lyrics to a colorized phonetic form. It highlights the rhy
 
 # Usage
 
+~~~~
 ~~~~ $ sudo apt-get install espeak
 ~~~~ $ python3 colorLyrics songFilename
 ~~~~ $ echo "lyrics" | python3 colorLyrics 
