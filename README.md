@@ -4,7 +4,10 @@ This program converts lyrics to a colorized phonetic form. It highlights the rhy
 # Usage
 
 ~~~~
+~~~~ $ sudo pip3 install termcolor
 ~~~~ $ sudo apt-get install espeak
+
+~~~~
 ~~~~ $ python3 colorLyrics songFilename
 ~~~~ $ echo "lyrics" | python3 colorLyrics 
 ~~~~ $ cat songFilename | python3 colorLyrics 
