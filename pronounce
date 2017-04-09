@@ -1,7 +1,0 @@
-#!./bin/ruby
-require "string_to_ipa"
-ARGF.each_line do |e|
-  puts e.split(/\W+/).map(&:to_ipa).join(' ')
-end
-
-
